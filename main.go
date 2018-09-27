@@ -14,6 +14,7 @@ var t = trie.MakeTrie()
 
 const (
 	prefix = "/api"
+	port   = "8080"
 )
 
 func list(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -53,5 +54,6 @@ func main() {
 	router.POST(prefix+"/projects/:path/start", start)
 	router.POST(prefix+"/stop", stop)
 
-	log.Fatal(http.ListenAndServe(":8080", router))
+	log.Print("listening on " + port)
+	log.Fatal(http.ListenAndServe(":"+port, router))
 }
