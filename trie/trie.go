@@ -41,11 +41,13 @@ func (t *Trie) Add(path []string) { // TODO add message when project already exi
 	curr := t
 
 	for len(path) > 0 {
-		if curr.Children[path[0]] == nil {
-			curr.Children[path[0]] = MakeTrie()
+		var has bool
+		curr, has = curr.Children[path[0]]
+		if !has {
+			curr = MakeTrie()
+			curr.Children[path[0]] = curr
 		}
 
-		curr, _ = curr.Children[path[0]]
 		path = path[1:]
 	}
 }
@@ -85,9 +87,7 @@ func (t *Trie) Record(path []string) bool {
 func (t *Trie) Stop() bool { // TODO fix not recording message caused by recursion
 	curr := t
 
-	for k, _ := range curr.Children {
-		child, _ := curr.Children[k]
-
+	for _, child := range curr.Children {
 		if child != nil { // child is a contender
 			entryCount := len(child.Value)
 
@@ -112,9 +112,7 @@ func (t *Trie) Stop() bool { // TODO fix not recording message caused by recursi
 func (t *Trie) IsRecording() bool {
 	curr := t
 
-	for k, _ := range curr.Children {
-		child, _ := curr.Children[k]
-
+	for _, child := range curr.Children {
 		if child != nil { // child is a contender
 			entryCount := len(child.Value)
 
