@@ -27,8 +27,8 @@ func create(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	path := strings.Split(ps[0].Value, "+")
 
 	if err := t.Add(path); err != nil {
-		w.Write([]byte(err.Error()))
 		w.WriteHeader(http.StatusInternalServerError) //REVIEW
+		w.Write([]byte(err.Error()))
 		return
 	}
 
