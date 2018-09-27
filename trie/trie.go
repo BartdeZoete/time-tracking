@@ -1,6 +1,7 @@
 package trie
 
 import (
+	"errors"
 	"time"
 )
 
@@ -37,8 +38,9 @@ func (t *Trie) Get(path []string) []Value {
 	return curr.Value
 }
 
-func (t *Trie) Add(path []string) { // TODO add message when project already exists
+func (t *Trie) Add(path []string) error {
 	curr := t
+	set := false
 
 	for len(path) > 0 {
 		var has bool
@@ -46,10 +48,16 @@ func (t *Trie) Add(path []string) { // TODO add message when project already exi
 		if !has {
 			curr = MakeTrie()
 			curr.Children[path[0]] = curr
+			set = true
 		}
 
 		path = path[1:]
 	}
+
+	if !set {
+		return errors.New("project already exists")
+	}
+	return nil
 }
 
 /*

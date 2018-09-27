@@ -24,19 +24,25 @@ func list(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 func create(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	path := strings.Split(ps[0].Value, "+")
-	t.Add(path)
-	// TODO: res
+
+	if err := t.Add(path); err != nil {
+		w.Write([]byte(err.Error()))
+		w.WriteHeader(http.StatusInternalServerError) //REVIEW
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
 }
 
 func start(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	// TODO: take res
 	path := strings.Split(ps[0].Value, "+")
-	t.Record(path)
+	t.Record(path) // REVIEW: take res?
+	w.WriteHeader(http.StatusCreated)
 }
 
 func stop(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	// TODO: take res
-	t.Stop()
+	t.Stop() // REVIEW: take res?
+	w.WriteHeader(http.StatusOK)
 }
 
 func main() {
