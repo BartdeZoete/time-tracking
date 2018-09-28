@@ -53,7 +53,12 @@ func start(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 }
 
 func stop(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	t.Stop() // REVIEW: take res?
+	if ok := t.Stop(); !ok {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("not recording"))
+		return
+	}
+
 	w.WriteHeader(http.StatusOK)
 }
 
