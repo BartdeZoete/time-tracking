@@ -37,7 +37,18 @@ func create(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
 func start(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	path := strings.Split(ps[0].Value, "+")
-	t.Record(path) // REVIEW: take res?
+	if t.IsRecording() {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("already recording"))
+		return
+	}
+
+	if ok := t.Record(path); !ok {
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte("project doesn't exist"))
+		return
+	}
+
 	w.WriteHeader(http.StatusCreated)
 }
 
