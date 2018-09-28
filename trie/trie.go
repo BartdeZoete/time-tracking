@@ -110,7 +110,9 @@ func (t *Trie) Stop() bool { // TODO fix not recording message caused by recursi
 				}
 			}
 
-			child.Stop()
+			if stopped := child.Stop(); stopped {
+				return true
+			}
 		} // else check brothers: next k
 	}
 
