@@ -137,7 +137,9 @@ func (t *Trie) IsRecording() bool {
 				}
 			}
 
-			child.IsRecording()
+			if recording := child.IsRecording(); recording {
+				return true
+			}
 		} // else check brothers: next k
 	}
 
