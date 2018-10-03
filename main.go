@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"roggl-server/trie"
 	"strings"
-	"time-tracking/trie"
 
 	"github.com/julienschmidt/httprouter"
 )
