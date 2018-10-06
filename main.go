@@ -4,13 +4,14 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"os"
 	"roggl-server/trie"
 	"strings"
 
 	"github.com/julienschmidt/httprouter"
 )
 
-var t = trie.MakeTrie()
+var t *trie.Trie
 
 const (
 	prefix = "/api"
@@ -33,6 +34,7 @@ func create(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	}
 
 	w.WriteHeader(http.StatusCreated)
+	saveTrie()
 }
 
 func start(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -50,6 +52,7 @@ func start(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	}
 
 	w.WriteHeader(http.StatusCreated)
+	saveTrie()
 }
 
 func stop(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -60,9 +63,19 @@ func stop(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	}
 
 	w.WriteHeader(http.StatusOK)
+	saveTrie()
 }
 
 func main() {
+	if len(os.Args) > 1 {
+		fname = os.Args[1]
+		log.Printf("loading and saving trie from/to %s\n", fname)
+	} else {
+		log.Println("no trie filename given, not loading or saving anything")
+	}
+
+	loadTrie()
+
 	router := httprouter.New()
 
 	router.GET(prefix, list)
