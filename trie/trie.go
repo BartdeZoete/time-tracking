@@ -19,6 +19,7 @@ type Trie struct {
 func MakeTrie() *Trie {
 	return &Trie{
 		Children: make(map[string]*Trie),
+		Value:    make([]Value, 0),
 	}
 }
 
